@@ -1,0 +1,16 @@
+*, ::before, ::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.footer{
+    background-color: rgb(29, 27, 27, 80%) !important;color: white !important;
+    width: 100%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+    position: absolute;
+    bottom: 0;
+    height: 30px;
+}
