@@ -17,6 +17,10 @@ body {
 .title {
   font-size: 3rem;
 }
+.reset{
+    width: 25px;
+    height: 25px;
+}
 .menu {
   display: grid;
   justify-content: center;

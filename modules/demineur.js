@@ -1,3 +1,4 @@
+
 let x = 0;
 let y = 0;
 let nb_mine = 0;
@@ -24,19 +25,19 @@ const init = function () {
 
     switch (level) {
         case "easy":
-            x = 10;
-            y = 10;
-            nb_mine = 13;
+            x = 5;
+            y = 5;
+            nb_mine = 4;
             break;
         case "medium":
-            x = 15;
-            y = 15;
-            nb_mine = 20;
+            x = 7;
+            y = 7;
+            nb_mine = 8;
             break;
         default:
-            x = 20;
-            y = 20;
-            nb_mine = 30;
+            x = 10;
+            y = 10;
+            nb_mine = 20;
             break;
 
     }
@@ -49,7 +50,7 @@ const init = function () {
     console.log("x =>", x);
     console.log("y =>", y);
     console.log("nb_mine =>", nb_mine);
-    continueGame= true;
+    continueGame = true;
     draw();
 };
 
@@ -62,7 +63,7 @@ const draw = function () {
         for (var j = 0; j < y; j++) {
             grid.innerHTML += "\
 									<button 	class='field-button' \
-												onClick='clickButton(this)' \
+												onclick='clickButton(this)' \
 												id='" + i + "" + j + "' \
 												data-x='" + i + "' \
 												data-y='" + j + "' \
@@ -110,13 +111,16 @@ const generateOtherField = function () {
 
 const discover = function (cx, cy) {
     let res = 0;
-    //check mine around
+    //check mine around and draw the number in the button
     res += cx == 0 ? 0 : terrain[cx - 1][cy] == MINE ? 1 : 0;
     res += cx == x - 1 ? 0 : terrain[cx + 1][cy] == MINE ? 1 : 0;
+
     res += cy == 0 ? 0 : terrain[cx][cy - 1] == MINE ? 1 : 0;
     res += cy == y - 1 ? 0 : terrain[cx][cy + 1] == MINE ? 1 : 0;
+
     res += cx == 0 || cy == 0 ? 0 : terrain[cx - 1][cy - 1] == MINE ? 1 : 0;
     res += cx == 0 || cy == y - 1 ? 0 : terrain[cx - 1][cy + 1] == MINE ? 1 : 0;
+
     res += cx == x - 1 || cy == 0 ? 0 : terrain[cx + 1][cy - 1] == MINE ? 1 : 0;
     res += cx == x - 1 || cy == y - 1 ? 0 : terrain[cx + 1][cy + 1] == MINE ? 1 : 0;
 
@@ -125,45 +129,96 @@ const discover = function (cx, cy) {
 
 const clickButton = function (item) {
     console.log("continue game =>", continueGame)
+    timer();
     if (continueGame) {
         var ex = item.dataset.x;
         var ey = item.dataset.y;
 
         checkAfterClick(ex, ey);
     }
-    //TODO: coder cette fonction
-    //testGameOver();
 }
 
-var checkAfterClick = function(cx, cy){
-	cx = parseInt(cx);
-	cy = parseInt(cy);
-	
-	// Check if we stay in the Array and if the button isn't display yet
-	if( cx >= 0 && cy >= 0 && cx < x && cy < y && affTerrain[cx][cy] == DEFAUT){
-		affTerrain[cx][cy] = CLICK_GAUCHE;
-		document.getElementById(cx + "" + cy).innerHTML = terrain[cx][cy];
-		document.getElementById(cx + "" + cy).style.backgroundColor = COULEUR_CHIFFRE;
-		console.log(cx + "" + cy);
-		
-		if(terrain[cx][cy] == 0){
-			// check arround
-			checkAfterClick(cx-1, cy);
-			checkAfterClick(cx+1, cy);
-			checkAfterClick(cx, cy-1);
-			checkAfterClick(cx, cy+1);
-			checkAfterClick(cx-1, cy-1);
-			checkAfterClick(cx-1, cy+1);
-			checkAfterClick(cx+1, cy-1);
-			checkAfterClick(cx+1, cy+1);
-		} 
-		else if(terrain[cx][cy] == MINE){
+var checkAfterClick = function (cx, cy) {
+    cx = parseInt(cx);
+    cy = parseInt(cy);
+
+
+    // Check if we stay in the Array and if the button isn't display yet
+    if (cx >= 0 && cy >= 0 && cx < x && cy < y && affTerrain[cx][cy] == DEFAUT) {
+        affTerrain[cx][cy] = CLICK_GAUCHE;
+        document.getElementById(cx + "" + cy).innerHTML = terrain[cx][cy];
+        document.getElementById(cx + "" + cy).style.backgroundColor = COULEUR_CHIFFRE;
+        console.log(cx + "" + cy);
+
+        if (terrain[cx][cy] == 0) {
+            // check arround
+            checkAfterClick(cx - 1, cy);
+            checkAfterClick(cx + 1, cy);
+            checkAfterClick(cx, cy - 1);
+            checkAfterClick(cx, cy + 1);
+            checkAfterClick(cx - 1, cy - 1);
+            checkAfterClick(cx - 1, cy + 1);
+            checkAfterClick(cx + 1, cy - 1);
+            checkAfterClick(cx + 1, cy + 1);
+        }
+        else if (terrain[cx][cy] == MINE) {
             // if the button is a bomb
-			document.getElementById(cx + "" + cy).style.backgroundColor = COULEUR_MINE;
-			alert("Game Over");
-			continueGame = false;
-		}
-	}
+            document.getElementById(cx + "" + cy).style.backgroundColor = COULEUR_MINE;
+            continueGame = false;
+        }
+    }
+
 };
+
+const testGagne = function () {
+    let caseRestante = 0;
+    for (var i = 0; i < x; i++) {
+        for (var j = 0; j < y; j++) {
+            if (document.getElementById(i + "" + j).style.backgroundColor == COULEUR_VIDE) {
+                caseRestante += 1;
+            }
+        }
+    }
+    if (caseRestante == nb_mine) {
+        return true;
+    }
+    return false;
+
+}
+
+
+var sec = 0;
+var min = 0;
+var hours = 0;
+var timeout;
+var time = document.getElementById("timer");
+var btnstop = document.getElementById("pauseBtn");
+
+function reset(){
+    h1.textContent = "00:00:00";
+}
+function updateTimer(){
+    sec++;
+    if (sec >= 60) {
+        sec = 0;
+        min++;
+        if (min >= 60) {
+            min = 0;
+            hours++;
+        }
+    }
+    time.textContent = (hours > 9 ? hours : "0" + hours)+ ":" + (min > 9 ? min : "0" + min)+ ":" + (sec > 9 ? sec : "0" + sec);
+    timer();
+}
+function timer() {
+    timeout = setTimeout(updateTimer, 1000);
+}
+function clear(){
+    clearTimeout(timeout);
+}
+btnstop.onclick = function() {
+    clearTimeout(timeout);
+}
+
 
 init();

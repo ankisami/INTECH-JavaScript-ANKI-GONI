@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./styles/styles.css" />
     <title>Évaluation Javascript</title>
-    <script defer src="./modules/demineur.js"></script>
+    <script  defer src="./modules/demineur.js"></script>
 
 </head>
 
@@ -16,14 +16,15 @@
     <div class="menu">
         <h1 class="title">Démineur</h1>
         <div class="options">
-            <select id="select">
+            <select id="select" onchange="init()" >
                 <option class="option" value="easy">Facile</option>
                 <option class="option" value="medium">Moyen</option>
                 <option class="option" value="hard">Difficile</option>
             </select>
             <div class="chrono">
-                <p class="timer">3:00</p>
-                <button class="timer-button">Pause</button>
+                <p id="timer" class="timer">00:00:00</p>
+                <button id="pauseBtn" class="timer-button">Pause</button>
+                <img src="./images/reset.png" alt="reset" onclick="init()" class="reset">
             </div>
         </div>
     </div>
