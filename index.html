@@ -1,19 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet"  href="./styles/styles.css"/>
-    <script  src="./js/demineur.js"></script>
-    test
-    
+    <link rel="stylesheet" href="./styles/styles.css" />
     <title>Évaluation Javascript</title>
+    <script defer src="./modules/demineur.js"></script>
+
 </head>
+
 <body>
-    testtt
+
+    <div class="menu">
+        <h1 class="title">Démineur</h1>
+        <div class="options">
+            <select id="select">
+                <option class="option" value="easy">Facile</option>
+                <option class="option" value="medium">Moyen</option>
+                <option class="option" value="hard">Difficile</option>
+            </select>
+            <div class="chrono">
+                <p class="timer">3:00</p>
+                <button class="timer-button">Pause</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-grid" />
 </body>
-<footer class="footer">
+
+<!-- <footer class="footer">
     Évaluation Javascript réalisée par ANKI Sami et GONI Baptiste
-</footer>
+</footer> -->
+
 </html>
